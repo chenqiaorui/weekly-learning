@@ -183,3 +183,100 @@ if [ -d "/opt" ];then
   echo true;
 fi
 ```
+# 成为一个可靠的SRE入门教程
+## 基础系列
+### linux基本命令
+```
+ls # 列出文件和目录
+pwd
+cd
+
+# 操控文件和目录
+touch
+mkdir
+cp
+mv
+rm
+
+# 查看文件
+cat
+head
+tail
+more # 空格向下翻页，enter一行，b向上翻页
+less
+seq 1 100 > a.txt # 制造一个测试文件
+
+# 文本处理
+grep
+sed
+sort
+
+# 多用户
+id
+whoami
+
+# 文件
+/etc/passwd
+/etc/group
+
+useradd
+passwd
+userdel
+
+useradd aim -s /bin/sh # 创建用户并指定sh
+usermod aim -s /bin/bash # 修改用户属性成/bin/bash
+
+groupadd sre # 添加组
+usermod -a -G sre aim # 给用户aim多加一个sre组
+groups aim # 查看aim所在组，id aim也可以。
+
+# 变成超级用户：拥有sudo能力
+grep "wheel" /etc/sudoers
+usermod -a -G wheel aim
+id aim
+su aim
+sudo cat /etc/shadow # 检验是否可以打开
+
+# 文件权限
+drwxrwxr-- # 文件类型/用户r(4)w(2)x(1)/组rwx/其他人r--
+chmod 644 file_name
+chown root:root file_name
+chgrp root # 改变group
+
+# 远程连接ssh
+ssh-keygen # 产生一对key到~/.ssh目录
+ssh-copy-id root@192.168.1.1 # 把自己的id_rsa.pub拷贝到192.168.1.1的~/.ssh/authorized_keys
+ssh root@192.168.1.1 # 连接
+ssh root@192.168.1.1 'ps aux' # 连接执行命令
+
+# 复制文件到远程服务器
+scp a.log root@192.168.1.1:/tmp
+
+# 软件包管理
+yum search httpd # 查找是否有可安装的包
+yum install httpd # 安装
+yum remove httpd # 卸载
+
+# 进程管理
+ps
+top
+
+# 内存管理
+free
+
+vmstat # 内存 + io + cpu信息展示
+
+# 磁盘
+df
+du
+
+# 后台服务：systemd
+/usr/lib/systemd/system
+systemctl reload name.service # 重载服务配置
+systemctl start name.service
+
+# 日志
+/var/log
+dmesg # 展示内核日志
+
+```
