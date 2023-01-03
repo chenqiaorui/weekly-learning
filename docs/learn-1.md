@@ -149,4 +149,37 @@ chmod 600 $HISTDIR/${LOGNAME}/*.hist* 2>/dev/null
 说明：
 
 -  `who -u am i`获取当前登录用户，登录时间，登录的远程ip
--  `[ -z $USER_IP ]`如果$USER_IP字符长度为0，返回真  
+-  `[ -z $USER_IP ]`如果$USER_IP字符长度为0，返回真
+
+# shell编程之if
+```
+# false
+if [ 1 -eq 2 ];then
+  echo true;
+else
+  echo false;
+fi
+
+# 简写: false
+[ 1 -eq 2 ] && echo true || echo false
+
+# 简写: false and false
+[ 1 -eq 2 ] && echo true || (echo false; echo false)
+
+# -o逻辑或: true, 逻辑与-a
+if [ 1 -eq 0 -o 1 -eq 1 ];then
+  echo true;
+else
+  echo false;
+fi
+
+# !逻辑非
+if [ ! 1 -eq 0 ];then
+  echo true; 
+fi
+
+# -d目录存在返回true；-f文件存在返回true
+if [ -d "/opt" ];then
+  echo true;
+fi
+```
