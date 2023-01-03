@@ -98,3 +98,9 @@ systemctl stop iptables
 说明：
 
 - CentOS系统内置的yum源中，没有想要的安装包，可额外添加yum源安装。安装epel和remi会在/etc/yum.repos.d/下生成相关的remi*.repo和epel*.repo文件。
+- 假设有一个请求`curl localhost`进到nginx，会先匹配`location /`的内容，通过try_files找到的index.php再匹配到`location ~ \.php$`。
+- `try_files $uri $uri/ /index.php?$query_string;` 按顺序查找文件。如`$uri`查找http://localhost/下的index文件;`$uri/`查找http://localhost/path/下的index文件;`/index.php?$query_string;`查找http://localhost/index.php?xx。
+- `fastcgi_pass`指定将与nginx通讯的fastcgi位置。
+- `fastcgi_index  index.php;`，index.php将被存到`$fastcgi_script_name`这个变量上。
+- `fastcgi_param`用于nginx给fastcgi传递参数。`SCRIPT_FILENAME`可以被cgi识别， `$document_root`取自nginx设置的root路径，`$document_root$fastcgi_script_name`等于nginx告诉cgi去`/var/www/html/example1.com/`找`index.php`，处理完结果返回给nginx。
+- `include /etc/nginx/fastcgi_params`，举个例子：fastcgi_params文件里面有这么一段`fastcgi_param  REMOTE_ADDR $remote_addr;`，它表示将nginx的$remote_addr赋值给REMOTE_ADDR，REMOTE_ADDR又能被cgi识别，这样就实现了变量的传递。
