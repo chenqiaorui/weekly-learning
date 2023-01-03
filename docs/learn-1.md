@@ -104,3 +104,19 @@ systemctl stop iptables
 - `fastcgi_index  index.php;`，index.php将被存到`$fastcgi_script_name`这个变量上。
 - `fastcgi_param`用于nginx给fastcgi传递参数。`SCRIPT_FILENAME`可以被cgi识别， `$document_root`取自nginx设置的root路径，`$document_root$fastcgi_script_name`等于nginx告诉cgi去`/var/www/html/example1.com/`找`index.php`，处理完结果返回给nginx。
 - `include /etc/nginx/fastcgi_params`，举个例子：fastcgi_params文件里面有这么一段`fastcgi_param  REMOTE_ADDR $remote_addr;`，它表示将nginx的$remote_addr赋值给REMOTE_ADDR，REMOTE_ADDR又能被cgi识别，这样就实现了变量的传递。
+
+## PHP-FPM参数调优
+```
+# 切换到/etc/php-fpm.d，查看www.conf
+user = apache # 设置fpm子进程的启动用户
+[www] # 设置fpm进程池的名称 
+
+pm = dynamic # 动态生成fpm子进程的个数
+pm.max_children = 50 # 最多50个子进程
+pm.start_servers = 5 # 初始启动的子进程个数
+pm.min_spare_servers = 5 # 最少的子进程个数
+
+pm = static # 设置成静态规则，这个时候只有pm.max_children起作用的，pm.min_spare_servers无效。
+
+pm.max_requests = 500 # 每个子进程处理过500个请求后会重启，可以解决内存泄漏问题。
+```
