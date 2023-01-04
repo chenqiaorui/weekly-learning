@@ -282,4 +282,12 @@ dmesg # 展示内核日志
 ### GIT基础
 ```
 git init # 初始化git仓库，生成.git目录
+git add # 追踪文件
+git commit # 保存成本地快照
+git log # 查看commit历史：作者、commitid、提交日期
+git branch b1 # 创建分支，b1分支代码取决于当时创建的分支
+git checkout b1 # 切换分支
+git merge b1 # 把b1分支代码合并到master，同时添加一个merge commit。
+git reset --hard commitid # 重置merge到上一个状态
+git rebase master # 假设当前为b2分支，git rebase master将以master最新代码为基底加上b2的commit
 ```
