@@ -304,3 +304,8 @@ dig A static.example.com +short
 dig NS static.saibohu.com +short
 dig CNAME static.saibohu.com +short
 ```
+
+### Python练习
+```
+
+```
