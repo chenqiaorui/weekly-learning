@@ -278,5 +278,8 @@ systemctl start name.service
 # 日志
 /var/log
 dmesg # 展示内核日志
-
+```
+### GIT基础
+```
+git init # 初始化git仓库，生成.git目录
 ```
