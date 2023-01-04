@@ -291,3 +291,16 @@ git merge b1 # 把b1分支代码合并到master，同时添加一个merge commit
 git reset --hard commitid # 重置merge到上一个状态
 git rebase master # 假设当前为b2分支，git rebase master将以master最新代码为基底加上b2的commit
 ```
+
+### 网络基础
+```
+# DNS 域名
+# /etc/hosts文件格式
+127.0.0.1 test.linkedin.com # ip FQDN(全限定域名)
+
+dig +trace 域名 # 追踪域名查询整个流程，A记录代表返回域名对应的ip地址，AAAA为ipv6，NS返回记录域名的权威名称服务器，CNAME返回域名的别名
+
+dig A static.example.com +short
+dig NS static.saibohu.com +short
+dig CNAME static.saibohu.com +short
+```
