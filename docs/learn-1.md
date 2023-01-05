@@ -301,8 +301,8 @@ git rebase master # 假设当前为b2分支，git rebase master将以master最�
 dig +trace 域名 # 追踪域名查询整个流程，A记录代表返回域名对应的ip地址，AAAA为ipv6，NS返回记录域名的权威名称服务器，CNAME返回域名的别名
 
 dig A static.example.com +short
-dig NS static.saibohu.com +short
-dig CNAME static.saibohu.com +short
+dig NS static.example.com +short
+dig CNAME static.example.com +short
 ```
 
 ### Python练习
@@ -396,4 +396,31 @@ cp access.log-20230105.gz access.log-20230104.gz # 多制造一个副本
 
 zcat access.log-*.gz |wc -l # 统计*.gz文件请求总数
 zcat access.log-*.gz |awk -F' ' '{print $7}'|sort -nr|uniq -c # 统计每个接口的请求个数 
+```
+### CURL使用
+```
+# -s沉默输出，只输出返回值
+curl myip.ipip.net -s|egrep -o "[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}" # -o表只输出匹配到的，输出ip
+
+# shell判断
+result=`curl myip.ipip.net -s|egrep -o "[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}"`
+[ -z $result ] && echo "empty" || echo "$result"
+
+# -L 或 --location 跟随重定向，如经历一次301重定向到https
+curl --location --request GET "http://httpbin.org/get?foo1=bar1&foo2=bar2"
+
+# -X 或 --request 指定请求方法
+curl --location --request GET "http://httpbin.org/get?foo1=bar1&foo2=bar2"
+
+# -o 返回内容下载到指定文件名称文件
+curl "http://httpbin.org/get?foo1=bar1&foo2=bar2" -o file
+
+# -e 添加referer
+curl -v -e "https://google.com?q=example" "http://httpbin.org/get?foo1=bar1&foo2=bar2"
+
+# -H 添加header，-H也可写成 --header
+curl -v "http://httpbin.org/get?foo1=bar1&foo2=bar2" -H 'X-API-KEY: edd1c9f034335f136f87ad84b625c8f1'
+
+# -X POST -d 发送POST方法，-d也可写成--data
+curl -v "http://httpbin.org/get?foo1=bar1&foo2=bar2" -H 'X-API-KEY: edd1c9f034335f136f87ad84b625c8f1' -X POST -d '{"name": "dds"}'
 ```
