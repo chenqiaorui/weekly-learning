@@ -309,3 +309,91 @@ dig CNAME static.saibohu.com +short
 ```
 
 ```
+
+### 日志轮询 + nginx请求分析
+背景：流量大的服务常常会产生很多大文件日志文件，占用磁盘空间，怎么去管理呢？使用日志切割服务logrotate。
+
+logrotate可以对日志进行截断、压缩、删除旧文件。比如说配置logrotate，让/var/log/nginx每30天轮询，并删除超过60天的日志，此过程完全自动化。
+
+安装logrotate，centos7默认自带
+```
+yum install logrotate
+```
+
+##### 运行原理
+logrotate的运行依赖`crontab`, 安装logrotate后, 自动在 /etc/cron.daily 目录下添加
+logrotate 文件
+
+说明：
+- 配置文件：/etc/logrotate.conf，一般不变动
+- 设置独立的轮询配置文件，/etc/logrotate.d
+
+#### 二、实践配置
+编辑文件/var/log/nginx/access.log
+```
+192.168.1.167 - - [19/Oct/2022:16:35:15 +0800] "GET /favicon.ico HTTP/1.1" 404 134 "http://192.168.1.167:891/test.log" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:105.0) Gecko/20100101 Firefox/105.0"
+192.168.1.167 - - [19/Oct/2022:16:35:45 +0800] "GET /api/status HTTP/1.1" 200 50 "-" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:105.0) Gecko/20100101 Firefox/105.0"
+192.168.1.179 - - [19/Oct/2022:15:53:45 +0800] "GET /js HTTP/1.1" 302 154 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36"
+192.168.1.179 - - [19/Oct/2022:15:54:08 +0800] "GET /js HTTP/1.1" 302 154 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36"
+192.168.1.167 - - [19/Oct/2022:16:35:14 +0800] "GET /test.log HTTP/1.1" 404 134 "-" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:105.0) Gecko/20100101 Firefox/105.0"
+192.168.1.179 - - [23/Nov/2022:19:08:31 +0800] "GET /ip HTTP/1.1" 200 13 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36"
+```
+
+配置轮询配置文件
+```
+vim /etc/logrotate.d/nginx
+
+/var/log/nginx/*.log {
+    daily
+    compress
+    delaycompress
+    rotate 365
+    missingok
+    notifempty
+    dateext
+    sharedscripts
+    postrotate
+        if [ -f /run/nginx.pid ]; then
+            # 重启nginx服务
+            kill -USR1 `cat /run/nginx.pid`
+        fi
+    endscript
+}
+```
+说明：
+- `monthly` 每月运行一次。其它可用值为'daily'，'weekly'或者'yearly'
+- `rotate 5` 切割后，保留最近的5次切割结果文件
+- `compress` 在轮循任务完成后，已轮循的归档将使用gzip进行压缩
+- `delaycompress` 总是与compress选项一起用，delaycompress选项指示logrotate不要将最近的归档压缩，压缩将在下一次轮循周期进行。这在你或任何软件仍然需要读取最新归档时很有用。
+- `missingok` 在日志轮循期间，任何错误将被忽略，例如“文件无法找到”之类的错误。
+- `notifempty` 如果日志文件为空，轮循不会进行。
+- `create 644 root root` 以指定的权限创建全新的日志文件，同时logrotate也会重命名原始日志文件
+- `postrotate`在所有其它指令完成后，postrotate和endscript里面指定的命令将被执行。在这种情况下，rsyslogd 进程将立即再次读取其配置并继续运行。
+- `size 100k` 日志大小超过 100k 时, 进行切割
+- `olddir /var/log/news/old` 切割后数据放入指定目录 /var/log/news/old
+- `nocompress` 转储文件不压缩
+
+
+配置完成后，载入/etc/lograte.d/nginx
+```
+# 即使轮循条件没有满足，我们也可以通过使用'-f'选项来强制logrotate轮循日志文件，'-v'参数提供了详细的输出
+logrotate -vf /etc/logrotate.d/nginx
+
+ll /var/log/nginx/
+```
+结果:
+access.log
+access.log-20230105
+
+access.log-20230105没有变成压缩文件是因为设置了delaycompress，后面再观察下个轮询周期到了access.log-20230105就会变成access.log-20230105.gz文件，access.log会变成access.log-20230106，access.log是最新的空文件，`zcat access.log-20230105.gz`查看压缩内容。
+
+logrotate自身的日志在`/var/lib/logrotate/`目录下
+
+接下来分析日志：
+```
+cd /var/log/nginx
+cp access.log-20230105.gz access.log-20230104.gz # 多制造一个副本
+
+zcat access.log-*.gz |wc -l # 统计*.gz文件请求总数
+zcat access.log-*.gz |awk -F' ' '{print $7}'|sort -nr|uniq -c # 统计每个接口的请求个数 
+```
