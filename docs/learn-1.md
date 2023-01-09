@@ -424,32 +424,6 @@ curl -v "http://httpbin.org/get?foo1=bar1&foo2=bar2" -H 'X-API-KEY: edd1c9f03433
 # -X POST -d 发送POST方法，-d也可写成--data
 curl -v "http://httpbin.org/get?foo1=bar1&foo2=bar2" -H 'X-API-KEY: edd1c9f034335f136f87ad84b625c8f1' -X POST -d '{"name": "dds"}'
 ```
-## APISIX网关使用
-### 安装配置
-
-```
-git clone https://github.com/apache/apisix-docker.git
-cd apisix-docker/example
-
-# 修改conf/config.yaml
-admin_key
-  -
-    name: "admin"
-    key: newsupersecurekey  # 请修改 key 的值
-
-docker-compose up -d # 修改docker-compose单个服务的配置，使用本命令可以生效
-chmod 777 apisix_log # 如果因文件权限问题启动不了服务，可临时修改文件权限，启动后进到容器内部，查看容器内目录uid和gid(执行`id`查看)。创建apisix用户`useradd apisix`，更改宿主机相应目录 chown -R apisix:apisix apisix_log
-
-# 访问管理面板
-http://ip:9000 admin/admin
-
-# 访问admin接口，即/apisix/route这些接口
-curl http://127.0.0.1:9180/apisix/admin/routes?api_key=newsupersecurekey -i
-```
-说明：
-
-- `./conf/config-default.yaml`为默认配置，与代码强绑定，不修改；自定义配置可修改./conf/config.yaml
-- 不修改`./conf/nginx.conf`，APISIX启动会根据`config.yaml`重置`nginx.conf`
 
 ### 30 days of HTML
 ```
