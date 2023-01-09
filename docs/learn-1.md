@@ -424,7 +424,6 @@ curl -v "http://httpbin.org/get?foo1=bar1&foo2=bar2" -H 'X-API-KEY: edd1c9f03433
 # -X POST -d 发送POST方法，-d也可写成--data
 curl -v "http://httpbin.org/get?foo1=bar1&foo2=bar2" -H 'X-API-KEY: edd1c9f034335f136f87ad84b625c8f1' -X POST -d '{"name": "dds"}'
 ```
-
 ## APISIX网关使用
 ### 安装配置
 
@@ -451,3 +450,236 @@ curl http://127.0.0.1:9180/apisix/admin/routes?api_key=newsupersecurekey -i
 
 - `./conf/config-default.yaml`为默认配置，与代码强绑定，不修改；自定义配置可修改./conf/config.yaml
 - 不修改`./conf/nginx.conf`，APISIX启动会根据`config.yaml`重置`nginx.conf`
+
+### 30 days of HTML
+```
+# 标签
+<p style="color:gray;">html</p>
+# 属性
+id, class, href, src, style
+# 单tag
+<img/>
+<input/>
+<meta/>
+<link/>
+# 注解
+<!-- HTML -->
+
+# DOM
+DOM，即Document Object Model，包含<html>根元素，还有子元素<head>、<body>、<h1>等。
+
+# <head>元素
+默认32px大小字体
+
+# <p>段落元素
+# <div>块元素、<section>、<main>、<footer>
+
+# 块元素
+<address></address>
+<article></artice>
+<aside></aside>
+
+# 非块元素
+<a>
+<button>
+<img>
+<input>
+<script>
+```
+### SpringBoot入门
+```
+# idea创建manvel项目
+File-new-Project
+
+# pom.xml引入依赖
+<!-- 从 Spring Boot 继承默认配置 -->
+<parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>2.2.2.RELEASE</version>
+    <relativePath/> <!-- lookup parent from repository -->
+</parent>
+
+<dependencies>
+    <!-- 实现对 SpringMVC 的自动化配置 -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+</dependencies>
+
+# 配置文件：application.yaml
+server:
+  port: 8080 # 内嵌的 Tomcat 端口号。默认值为 8080。
+
+# 创建Controller，提供一个简单的 HTTP API。
+@RestController
+@RequestMapping("/demo")
+public class DemoController {
+
+  @GetMapping("/echo")
+  public String echo() {
+      return "echo";
+  }
+}
+
+# Application启动类
+@SpringBootApplication
+public class Application {
+
+  public static void main(String[] args) {
+      SpringApplication.run(Application.class, args);
+  }
+
+}
+```
+说明：
+
+- 引入 spring-boot-starter-parent 作为父 POM，从而继承其默认配置
+- 引入 spring-boot-starter-web 依赖，实现对 SpringMVC 的自动化配置。同时该依赖会自动帮我们引入 SpringMVC 等相关依赖。
+- 在类上，添加 @SpringBootApplication 注解，声明是一个 Spring Boot 应用。通过该注解，可以带来 Spring Boot 自动配置等等功能。
+- 在 #main(String[] args) 方法中，我们通过 SpringApplication#run(Class<?> primarySource, String... args) 方法，启动 Spring Boot 应用。
+
+### 快速生成一个Spring Initializr项目
+```
+# 生成项目
+https://start.spring.io/ -> Explore浏览配置好的代码 -> Generate生成zip代码 -> 解压打开IDEA -> File -> Project from Exist Project -> Maven -> Next
+# Maven依赖解析
+<properties>
+    <!--设置 <java.version> 属性为 1.8，表示使用 JDK8-->
+		<java.version>1.8</java.version>
+	</properties>
+
+引入 spring-boot-starter-test 依赖，实现对 Test 的自动化配置
+
+引入 spring-boot-maven-plugin 插件，用于将 Spring Boot 项目打包成 jar 或者 war 包
+
+# 构建一个单元测试类
+@SpringBootTest
+class Demo02ApplicationTests {
+
+	@Test
+	void contextLoads() {
+	}
+
+}
+
+# IDEA内置Spring Initializr插件
+File -> New -> Project -> Spring Initializr -> 选择Web依赖和版本号
+
+# Springboot自动重启
+spring-boot-devtools检测classpath下文件变化，并进行自动重启。
+
+手动编译：build -> build project
+自动编译：IntelliJ IDEA -> Preference -> Compiler -> Build Project automatically，处于Debug自动编译生效。 勾选 compiler.automake.allow.when.app.running 使得自动编译在运行中生效。
+
+引用：
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-devtools</artifactId>
+    <optional>true</optional> <!-- 可选 -->
+</dependency>
+
+# Springboot热部署
+Preference -> Build,Execution -> debugger -> hotSwap -> build project before reloading class , reload classwd in background
+
+热部署演示：Running应用 -> 自动编译project -> 热部署
+
+# Spring Boot集成SpringMVC
+通过spring-boot-starter-web实现springmvc的自动化配置，实现api增删改查
+
+Springmvc常用的注解：
+@Controller # 添加在类，表明这是Controller对象
+@RestController # 是@Controller+@ResponseBody组合注解，结果经过Json序列化
+@RequestMapping # 作用在类或方法，属性有path接口路径；value和path相同；method请求方法
+@GetMapping
+@PostMapping
+@PutMapping
+@RequestParam # 添加在方法参数上。属性有required
+@PathVariable
+
+# 示例
+// UserController
+
+@RestController
+@RequestMapping("/users")
+public class UserController {
+
+  /**
+  * 查询用户列表
+  * @return 用户列表
+  */
+  // @GetMapping("/list")
+  @GetMapping("")
+  public List<User> list() {
+    List<User> result = new ArrayList<>();
+    result.add(new User().setId(1).setUserName("ricky"));
+    return result;
+  }
+
+  /**
+  *
+  * 获得指定用户编号的用户
+  * @param id 用户编号
+  * @return 用户
+  */
+  //@GetMapping("/get")
+  //@RequestParam("id") 
+  @GetMapping("/{id}")
+  public User get(@PathVariable("id")Integer id) {
+    // 查询并返回用户
+    return new User().setId(id).setUserName("username: " + id);
+  }
+
+  /**
+  * 添加用户
+  * @param addDTO 添加用户信息
+  * @return添加成功的用户编号
+  */
+  // @PostMapping("add")
+  //
+  @PostMapping("")
+  public Integer add(UseraddDTo addDTO) {
+    // 插入用户记录
+    Integer returnId = 1;
+    // 返回用户编号
+    return returnId;
+  }
+
+  /**
+  * 更新指定用户编号的用户
+  *
+  * @param id 用户编号
+  * @param updateDTO 更新用户信息 DTO
+  * @return 是否修改成功 
+  */
+  //@PostMapping("/update")
+  @PutMapping("/{id}")
+  public Boolean update(@PathVariable("id") Integer id, UserUpdateDTO updateDTO) {
+    // 将id设置到 updateDTO中
+    updateDTO.setId(id);
+    // 更新用户记录
+    Boolean success = true;
+    // 返回更新是否成功
+    return success;
+  }
+  /**
+  * 删除指定用户编号的用户
+  *
+  * @param id 用户编号
+  * @return 是否删除成功
+  */
+  //@DeleteMapping("/delete")
+  //@RequestParam("id")
+  @DeleteMapping("/{id}")
+  public Boolean delete(@PathVariable("id")Integer id) {
+    // 删除用户记录
+    Boolean success = false;
+    return success;
+  }
+}
+
+```
+说明：
+- resource/static 存放静态文件，如css
+- resource/templates 目录模板，如thymeleaf、freemarker
