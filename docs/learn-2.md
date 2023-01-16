@@ -79,10 +79,6 @@ BIOS决定使用哪块磁盘后，交给grub启动界面 -> 控制权转到操�
 
 init进程启动后 -> 根据运行级别运行程序/etc/rc*.d(如/etc/rc1.d) -> 命令行或ssh登录(先加载/etc/profile，再加载~/.bash_profile、~/.bash_login、~/.profile。需要注意的是，这三个文件只要有一个存在，就不再读入后面的文件了。比如，要是 ~/.bash_profile 存在，就不会再读入后面两个文件了。)
 
-### Systemd 练习
-systemctl list-units # 查看所有运行单元
-http://ruanyifeng.com/blog/2016/03/systemd-tutorial-commands.html
-
 ### Nginx之nginx.conf配置文件解析
 ```
 user  nobody; # 启动nginx子进程用户
@@ -142,4 +138,63 @@ http {
     include /etc/nginx/conf.d/*.conf;
 }
 
+```
+### Python库工具jc
+能够将普通文本输出转换成json数据
+```
+# 安装
+pip3 install jc
+
+# 使用
+dig example.com | jc --dig
+
+# 获取ip
+dig example.com | jc --dig | jq -r '.[].answer[].data'
+
+参考：https://kellyjonbrazil.github.io/jc/
+```
+
+### CSS训练
+```
+# 练习网站
+https://codepen.io/pen?editors=1111
+
+# 练习课堂
+https://web.dev/learn/css/box-model/
+
+# 示例
+<p>xxx</p>
+
+p {
+    width: 50px; # 宽度
+    height: 50px; # 高度
+    padding: 50px; # 内边距
+    boder: 1px solid; # 1px边框宽度，solid实线 
+}
+```
+
+### 前端构建工具Webpack
+```
+# 概念
+构建就是将所有源码转换成可执行的HTML、CSS、JS代码。简单讲就是把项目打包成可执行文件。
+- 如typescript转换成Javascript、SCSS转换成CSS；
+- 文件优化，如压缩js、html、css、图片；
+- 模块合并
+- 自动刷新构建到浏览器运行
+- 代码校验
+
+# 构建用到的工具：npm
+
+参考：http://webpack.wuhaolin.cn/
+```
+### centos7安装docker-compose
+```
+# 下载docker-compose
+curl -L https://get.daocloud.io/docker/compose/releases/download/v2.15.1/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose 
+
+# 赋权
+chmod +x /usr/local/bin/docker-compose
+
+# 查看版本
+docker-compose version
 ```
