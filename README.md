@@ -13,4 +13,7 @@
 二月
 
 第 3 期：[配置NGNX模板](docs/learn-3.md)
+
 第 4 期：[快速编写SHELL脚本模板](docs/learn-4.md)
+
+第 5 期：[sed集合](docs/learn-5.md)

@@ -1,3 +1,5 @@
+#### shell模板
+```
 [ ! "$USER" == "www" ]&&{ echo "Please switch user 'www' to run deploy.sh";exit 1; }
 
 # Branch=test Project=web-project Target_dir_develop=/tmp
@@ -200,3 +202,4 @@ main(){
 }
 
 main
+```
