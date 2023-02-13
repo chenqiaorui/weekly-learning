@@ -19,3 +19,5 @@
 第 5 期：[sed集合](docs/learn-5.md)
 
 第 7 期：[Mysql运维](docs/learn-7.md)
+
+第 8 期：[网络工具](docs/learn-8.md)
