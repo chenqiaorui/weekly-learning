@@ -1,42 +1,61 @@
-# 每周学习第 3 期
+#### server
+server {
+    listen 80;
+    server_name localhost;
+    
+    access_log /var/log/nginx/domain.access.log main;
+    error_log /var/log/nginx/domain.error.log error;
 
-这里记录过去一周，我看到的值得学习的东西，每周六发布。
-## 怎么去部署SpringBoot项目
-### 示例项目
-参考文档: https://www.macrozheng.com/mall/deploy/mall_deploy_docker_compose.html#docker%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E5%8F%8A%E4%BD%BF%E7%94%A8
+    fastcgi_ignore_client_abort     on;
+    proxy_ignore_client_abort       on;
+    fastcgi_connect_timeout 300;
+  
+    fastcgi_read_timeout 600;
+    fastcgi_send_timeout 600;
+    proxy_connect_timeout 600;
+    proxy_read_timeout 600;
 
-```
-# 服务器配置
-CenterOS7.6版本，推荐6G以上内存。
+    location ~ .*\.(html|htm)$ {
+        add_header Cache-Control "private, no-store, no-cache, must-revalidate, proxy-revalidate";
+    }
 
-# pull docker 镜像
-docker pull mysql:5.7
-docker pull redis:7
-docker pull nginx:1.22
-docker pull rabbitmq:3.9-management
-docker pull logstash:7.17.3
-docker pull mongo:4
+    location ~ .*\.(gif|jpg|jpeg|bmp|png|ico|txt|js|css|json|svg|ttf)$ {
+        expires      7d;
+    }
 
-# ...
+    location /api/ {
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-Ip $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_pass http://localhost:9000;
+    }
 
-# 业务篇
-## 商品列表 pms_product 
-表设计：
-1.表名以下划线隔开
-2.id设计为AUTO_INCREMENT，类型长度bigint(20)
-3.图片字段类型长度设计为varchar(255)
-4.name设计为NOT NULL，类型长度varchar(64)
-5.delete_status这种int(1)，添加COMMENT '删除状态：0->未删除；1->已删除'
-6.价格price类型长度为decimal(10,2)
-7.文本describe类型设计为text
-8.create_time时间类型为datetime
+    location /child/post {
+        index  index.html index.htm;
+        try_files $uri $uri/ /child/post/index.html;
+    }
+    location ^~/weiboimg/ {
+        if ($request_uri ~ ^\/weiboimg\/(.*?)\/(.*)) {
+            set $img_tuchuang_host $1;
+        }
 
-## 商品管理Controller
-1.支持swagger
-2.创建商品
-- 接口：/product/create，方法名create，参数传入@RequestBody ProductParam，返回值为int类型，但此处可封装CommentResult
+        proxy_set_header referer https://weibo.com;
+        proxy_set_header Origin 'https://weibo.com';
+        rewrite ^/weiboimg/(.*?)/(.*) /$2 break;
+        proxy_pass https://$img_tuchuang_host;
+    }
+}
 
-- body传递给service接口方法create，impl实现类标注@Service，自动装配ProductMapper接口，再根据resources/mapper/productMapper.xml文件进行sql操作。（mbg能根据数据库表生成相应model和mapperxml和mapper类）
+示例：
+`curl localhost:9081/weiboimg/qyapi.weixin.qq.com/cgi-bin/user/get?access_token=oh`，`$1`返回`qyapi.weixin.qq.com`。
 
-- 用到druid管理数据库连接池、分页功能
-```
+#### cors
+add_header Access-Control-Allow-Origin * always;
+add_header Access-Control-Allow-Credentials true always;
+add_header Access-Control-Allow-Methods "GET,POST,OPTIONS,PUT,DELETE" always;
+add_header Access-Control-Allow-Headers "DNT,X-Mx-ReqToken,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Authorization,auth-signature" always;
+
+#### deny
+allow 127.0.0.1;
+allow 192.168.0.0/24;
+deny all;
