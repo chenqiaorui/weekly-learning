@@ -21,3 +21,15 @@
 第 7 期：[Mysql运维](docs/learn-7.md)
 
 第 8 期：[网络工具](docs/learn-8.md)
+
+第 9 期：[Supervisor管理前台任务](docs/learn-9.md)
+
+第 10 期：[Cron定时任务](docs/learn-10.md)
+
+第 11 期：[监控策略](docs/learn-11.md)
+
+第 12 期：[Ansible生产](docs/learn-12.md)
+
+第 13 期：[Kubernetes生态](docs/learn-13.md)
+
+第 14 期：[Python开发](docs/learn-14.md)
