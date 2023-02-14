@@ -46,6 +46,9 @@ server {
     }
 }
 
+示例：
+`curl localhost:9081/weiboimg/qyapi.weixin.qq.com/cgi-bin/user/get?access_token=oh`，`$1`返回`qyapi.weixin.qq.com`。
+
 #### cors
 add_header Access-Control-Allow-Origin * always;
 add_header Access-Control-Allow-Credentials true always;

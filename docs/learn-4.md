@@ -1,4 +1,5 @@
-#### shell模板
+### shell模板
+#### 部署服务
 ```
 [ ! "$USER" == "www" ]&&{ echo "Please switch user 'www' to run deploy.sh";exit 1; }
 
@@ -203,3 +204,33 @@ main(){
 
 main
 ```
+
+#### 重启服务
+#!/bin/bash
+
+DIR=$PWD
+SERVICE_NAME=te_emog
+/opt/go/bin/go build -o build/$SERVICE_NAME > /dev/null || echo 'go build step error!'
+
+cd $PWD/supervisor
+[ -e supervisor.sock ] && supervisorctl restart all || supervisord -c supervisord.conf
+
+================or=================
+
+#!/bin/bash
+DIR=$PWD
+BRANCH=$(basename -s ref`cat .git/HEAD`)
+PROJECT=$(basename $PWD)
+NAME=$PROJECT-$BRANCH
+
+/opt/go/bin/go build -o build/$NAME &> /dev/null||echo 'go get code.aliyun.com...'
+
+export GOPROXY=https://goproxy.io
+export GO111MODULE=on
+
+#PID=`/usr/sbin/lsof cmd|grep $NAME|awk '{print $2}'`
+PID=`ps -ef|grep -v grep|grep $NAME|awk '{print $2}'`
+[ $PID ] && { kill $PID; while true; do [ -e /proc/$PID/stat ] || break; done; }
+nohup build/$NAME -c config/service.yaml &> logs/output &
+sleep 2
+cat logs/output
