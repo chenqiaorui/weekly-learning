@@ -82,12 +82,21 @@ function _M.rewrite(conf, ctx)
 end
 
 #### 热加载插件
-curl `http://127.0.0.1:9080/apisix/admin/plugins/reload` -H 'X-API-KEY: edd1c9f034335f136f87ad84b625c8f1' -X PUT
+curl 'http://127.0.0.1:9080/apisix/admin/plugins/reload' -H 'X-API-KEY: edd1c9f034335f136f87ad84b625c8f1' -X PUT
 
 #### 访问认证插件
 curl localhost:9080/web1 -H"apikey: auth-one"
 
 #### 插件日志优先级
-error > warn > info
+error > warn > info 
+
+#日志将输出到error.log文件
 core.log.warn("warn : -> hit key-auth rewrite")
 
+#### conf参数
+代表插件配置信息
+
+core.log.warn(core.json.encode(conf))
+    打印 =>
+    
+{"query":"apikey","disable":false,"header":"apikey"}

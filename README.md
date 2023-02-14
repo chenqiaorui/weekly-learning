@@ -24,3 +24,5 @@
 
 第 8 期：[网络工具](docs/learn-8.md)
 
+第 15 期：[ETCD使用](docs/learn-15.md)
+
