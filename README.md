@@ -20,5 +20,7 @@
 
 第 6 期：[APISIX-LUA插件开发](docs/learn-6.md)
 
+第 7 期：[Mysql运维](docs/learn-7.md)
 
+第 8 期：[网络工具](docs/learn-8.md)
 
