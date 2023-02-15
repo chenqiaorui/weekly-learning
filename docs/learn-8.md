@@ -14,3 +14,13 @@ traceroute www.baidu.com
 侦测远端服务端口是否可用
 
 telnet www.baidu.com 80
+
+#### curl
+发送http请求
+
+curl -v "http://www.baidu.com"
+
+#### wget
+下载资源
+
+wget -O baidu.html "http://www.baidu.com"
