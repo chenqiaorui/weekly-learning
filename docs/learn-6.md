@@ -1,5 +1,7 @@
 ### 插件开发须知
-##### 定义插件名称、优先级、schema
+#### <<key-auth插件分析>> 
+定义插件名称、优先级、schema
+
 local _M = {                    
     version = 0.1,     
     priority = 2500,   
@@ -98,5 +100,9 @@ core.log.warn("warn : -> hit key-auth rewrite")
 
 core.log.warn(core.json.encode(conf))
     打印 =>
-    
+
 {"query":"apikey","disable":false,"header":"apikey"}
+
+
+### <<redirect插件分析>>
+重定向URL
