@@ -24,6 +24,9 @@ curl -v "http://www.baidu.com"
 
 wget http://logtail-release-cn-hangzhou.oss-cn-hangzhou.aliyuncs.com/linux64/logtail.sh -O logtail.sh;chmod 755 logtail.sh // -O 指定文件名称
 
+# tcpdump 抓post请求并存放到文件
+nohup tcpdump -s 0 -A -vv 'tcp[((tcp[12:1] & 0xf0) >> 2):4] = 0x504f5354' | grep -C 100 "/api/screenshot" >> file.log &
 
+more tcpdump examples see: https://hackertarget.com/tcpdump-examples/ 
 ```
 

@@ -114,3 +114,11 @@ echo "-------$(date +%F_%T) Stop MySQL database backup-------- " >>${BAK_PATH}/b
 0 3 * * * sh /root/mysql_back.sh
 ```
 
+#### 设置远程连接权限
+```
+$ docker exec -it mysql mysql -uroot -p
+##输入密码：PXDN93VRKUm8TeE7
+$ use mysql;
+$ update user set host='%' where user='root';
+$ FLUSH PRIVILEGES;
+```
