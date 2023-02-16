@@ -39,4 +39,8 @@
 
 第 15 期：[ETCD使用](docs/learn-15.md)
 
+第 16 期：[Java项目部署](docs/learn-16.md)
+
+第 25 期：[linux命令](docs/learn-25.md)
+
 
