@@ -24,7 +24,6 @@
 
 第 8 期：[网络工具](docs/learn-8.md)
 
-
 第 9 期：[Supervisor管理前台任务](docs/learn-9.md)
 
 第 10 期：[Cron定时任务](docs/learn-10.md)
@@ -38,5 +37,17 @@
 第 14 期：[Python开发](docs/learn-14.md)
 
 第 15 期：[ETCD使用](docs/learn-15.md)
+
+第 16 期：[firewalld使用](docs/learn-16.md)
+
+第 17 期：[docker & docker-compose](docs/learn-17.md)
+
+第 18 期：[kafka-zookeeper队列原理](docs/learn-18.md)
+
+第 19 期：[filebeat数据收集](docs/learn-19.md)
+
+第 20 期：[elk使用](docs/learn-20.md)
+
+第 21 期：[go](docs/learn-21.md)
 
 
