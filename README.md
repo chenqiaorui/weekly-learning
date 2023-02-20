@@ -52,6 +52,8 @@
 
 第 22 期：[jaeger](docs/learn-22.md)
 
+第 23 期：[vue](docs/learn-23.md)
+
 第 25 期：[linux命令](docs/learn-25.md)
 
 
