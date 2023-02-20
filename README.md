@@ -50,9 +50,11 @@
 
 第 21 期：[go](docs/learn-21.md)
 
+第 22 期：[jaeger](docs/learn-22.md)
+
 第 25 期：[linux命令](docs/learn-25.md)
 
 
-第 21 期：[jaeger](docs/learn-22.md)
+
 
 

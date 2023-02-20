@@ -1,4 +1,6 @@
 ### 插件开发须知
+请求经过网关的不同阶段： init, rewrite, access, balancer, header filter, body filter and log。
+
 #### <<key-auth插件分析>> 
 定义插件名称、优先级、schema
 
@@ -84,7 +86,7 @@ function _M.rewrite(conf, ctx)
 end
 
 #### 热加载插件
-curl 'http://127.0.0.1:9080/apisix/admin/plugins/reload' -H 'X-API-KEY: edd1c9f034335f136f87ad84b625c8f1' -X PUT
+curl 'http://127.0.0.1:9180/apisix/admin/plugins/reload' -H 'X-API-KEY: edd1c9f034335f136f87ad84b625c8f1' -X PUT
 
 #### 访问认证插件
 curl localhost:9080/web1 -H"apikey: auth-one"
@@ -102,7 +104,6 @@ core.log.warn(core.json.encode(conf))
     打印 =>
 
 {"query":"apikey","disable":false,"header":"apikey"}
-
 
 ### <<redirect插件分析>>
 重定向URL
