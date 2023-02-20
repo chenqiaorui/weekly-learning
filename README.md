@@ -54,7 +54,12 @@
 
 第 23 期：[vue](docs/learn-23.md)
 
+第 24 期：[git](docs/learn-24.md)
+
 第 25 期：[linux命令](docs/learn-25.md)
+
+第 26 期：[运维工具](docs/learn-26.md)
+
 
 
 
