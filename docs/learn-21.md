@@ -3,6 +3,7 @@
 #### package
 编辑main.go
 ```
+package main
 ```
 #### modd代码热部署
 modd作用: 监听文件变化，热部署应用。
