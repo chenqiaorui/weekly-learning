@@ -58,6 +58,8 @@
 
 第 30 期：[Redis](docs/learn-30.md)
 
+第 31 期：[正则表达式](docs/learn-31.md)
+
 
 
 
