@@ -198,3 +198,5 @@ chmod +x /usr/local/bin/docker-compose
 # 查看版本
 docker-compose version
 ```
+
+#### APISIX开发插件
