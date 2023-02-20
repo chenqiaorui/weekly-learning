@@ -70,13 +70,29 @@
 
 第 34 期：[前端知识](docs/learn-34.md)
 
-第 35 期：[操作系统](docs/learn-35.md)
+第 35 期：[操作系统&性能优化](docs/learn-35.md)
 
 第 36 期：[阿里源](docs/learn-36.md)
 
 第 37 期：[Ansible](docs/learn-37.md)
 
 第 38 期：[Chromedp](docs/learn-38.md)
+
+第 39 期：[Jenkins](docs/learn-39.md)
+
+第 40 期：[Kubernetes](docs/learn-40.md)
+
+第 41 期：[中间件](docs/learn-41.md)
+
+第 42 期：[日志切割](docs/learn-42.md)
+
+第 43 期：[LVM和分区](docs/learn-43.md)
+
+第 44 期：[Nginx](docs/learn-44.md)
+
+第 45 期：[PHP](docs/learn-45.md)
+
+第 46 期：[运维办公工具](docs/learn-46.md)
 
 
 

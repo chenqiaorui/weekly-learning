@@ -1284,3 +1284,91 @@ $# # 传入参数个数
 $? # 上一个命令执行状态，成功返回0；否则1
 $$ # 返回当前运行脚本的pid
 ```
+
+##### 比较表示符
+- `gt` greater than 大于
+- `ge` greater than or equal 大于等于
+- `lt` less than 小于
+- `le` less than or equal 小于等于
+- `eq` equal 等于
+- `ne` not equal 不等于
+
+注意：只能用于整数比较，不能是字符串
+
+示例
+```
+if [[ 100 -gt 30 ]];then
+  echo "大于"
+fi
+```
+
+#### 筛选出ip地址
+grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' filename  # o只展示匹配到的字符
+
+#### shell statement
+```
+# file exist or not
+filename="a.log"
+if [ -e $filename ];then
+  echo "$filename exist"
+fi
+
+# show date
+date +%Y%m%d%H%M%S  # 20221219150107
+
+# download 
+wget -O filename "http://example.com" # 下载并重命名
+
+# curl
+curl -L google.com # follow重定向到最终目的
+
+# adduser and set passwd
+useradd username
+passwd username
+
+# print all alias
+alias -p
+unalias zz # 去除别名
+alias poko='su poko' # 设置别名，临时。
+
+# compgen
+compgen -u # 列出所有用户 
+compgen -g # 列出所有组
+
+# 用户最后一次登录时间
+lastlog 
+
+# 检查reboot情况
+last reboot
+
+# 列出运行的服务
+service --status-all
+
+# kill相关program的所有进程
+kill -9 $(ps aux | grep 'program_name' | awk '{print $2}')
+
+# 修改hostname
+hostname ricky # 立即生效，重启失效
+  or
+hostnamectl set-hostname ricky  # 重启后依然生效
+
+# umount时，检查哪些文件使得device busy
+lsof /mnt/dir
+
+# who
+正在登录的用户
+
+# 列出所有enabled的服务
+systemctl list-unit-files|grep enabled
+
+# 多窗口 
+screen -S test # 创建视窗
+ctrl + a + d # 跳出视窗
+screen -r # 回到视窗 
+
+# 并行执行任务，都完成后再往下执行
+sh a.sh &
+sh b.sh &
+wait
+echo "it's me"
+```
