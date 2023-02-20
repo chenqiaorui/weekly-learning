@@ -56,6 +56,8 @@
 
 第 25 期：[linux命令](docs/learn-25.md)
 
+第 30 期：[Redis](docs/learn-30.md)
+
 
 
 

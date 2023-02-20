@@ -31,25 +31,25 @@ server {
         proxy_pass http://localhost:9000;
     }
 
-    location /child/post {
+    location /body/post {
         index  index.html index.htm;
-        try_files $uri $uri/ /child/post/index.html;
+        try_files $uri $uri/ /body/post/index.html;
     }
-    location ^~/weiboimg/ {
-        if ($request_uri ~ ^\/weiboimg\/(.*?)\/(.*)) {
+    location ^~/ttimg/ {
+        if ($request_uri ~ ^\/ttimg\/(.*?)\/(.*)) {
             set $img_tuchuang_host $1;
         }
-
-        proxy_set_header referer https://weibo.com;
-        proxy_set_header Origin 'https://weibo.com';
-        rewrite ^/weiboimg/(.*?)/(.*) /$2 break;
+        # 伪造referer
+        proxy_set_header referer https://ttimg.com;
+        proxy_set_header Origin 'https://ttimg.com';
+        rewrite ^/ttimg/(.*?)/(.*) /$2 break;
         proxy_pass https://$img_tuchuang_host;
     }
 }
 ```
 
 示例：
-`curl localhost:9081/weiboimg/qyapi.weixin.qq.com/cgi-bin/user/get?access_token=oh`，`$1`返回`qyapi.weixin.qq.com`。
+`curl localhost:9081/ttimg/qyapi.qq.com/cgi-bin/user/get?access_token=oh`，`$1`返回`qyapi.qq.com`。
 
 #### cors
 ```
@@ -106,9 +106,9 @@ tcp_nopush on; #防止网络阻塞
 tcp_nodelay on; #防止网络阻塞
 keepalive_timeout 120; #长连接超时时间，单位是秒
 
-#FastCGI相关参数是为了改善网站的性能：减少资源占用，提高访问速度。下面参数看字面意思都能理解。
-fastcgi_connect_timeout 300;
-fastcgi_send_timeout 300;
+#FastCGI相关参数是为了改善网站的性能：减少资源占用，提高访问速度。
+fastcgi_connect_timeout 300; // nginx连至fastcgi超时时间(单位秒)
+fastcgi_send_timeout 300;   // nginx发送request至cgi超时时间
 fastcgi_read_timeout 300;
 fastcgi_buffer_size 64k;
 fastcgi_buffers 4 64k;
