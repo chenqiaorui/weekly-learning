@@ -22,7 +22,7 @@
 
 第 7 期：[Mysql运维](docs/learn-7.md)
 
-第 8 期：[网络工具](docs/learn-8.md)
+第 8 期：[网络](docs/learn-8.md)
 
 第 9 期：[Supervisor管理前台任务](docs/learn-9.md)
 
@@ -54,11 +54,46 @@
 
 第 23 期：[vue](docs/learn-23.md)
 
+第 24 期：[git](docs/learn-24.md)
+
 第 25 期：[linux命令](docs/learn-25.md)
+
+第 26 期：[运维工具](docs/learn-26.md)
 
 第 30 期：[Redis](docs/learn-30.md)
 
 第 31 期：[正则表达式](docs/learn-31.md)
+
+第 32 期：[Java](docs/learn-32.md)
+
+第 33 期：[Python](docs/learn-33.md)
+
+第 34 期：[前端知识](docs/learn-34.md)
+
+第 35 期：[操作系统&性能优化](docs/learn-35.md)
+
+第 36 期：[阿里源](docs/learn-36.md)
+
+第 37 期：[Ansible](docs/learn-37.md)
+
+第 38 期：[Chromedp](docs/learn-38.md)
+
+第 39 期：[Jenkins](docs/learn-39.md)
+
+第 40 期：[Kubernetes](docs/learn-40.md)
+
+第 41 期：[中间件](docs/learn-41.md)
+
+第 42 期：[日志切割](docs/learn-42.md)
+
+第 43 期：[LVM和分区](docs/learn-43.md)
+
+第 44 期：[Nginx](docs/learn-44.md)
+
+第 45 期：[PHP](docs/learn-45.md)
+
+第 46 期：[运维办公工具](docs/learn-46.md)
+
 
 
 

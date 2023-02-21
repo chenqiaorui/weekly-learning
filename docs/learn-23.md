@@ -60,6 +60,6 @@ import HelloWorld from './component/HelloWorld.vue'
 
 <template>
   <!-- 调用子组件-->
-  <HelloWorld>
+  <HelloWorld/>
 </template>
 
