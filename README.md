@@ -34,7 +34,7 @@
 
 第 13 期：[Kubernetes生态](docs/learn-13.md)
 
-第 14 期：[Python开发](docs/learn-14.md)
+第 14 期：[Python](docs/learn-14.md)
 
 第 15 期：[ETCD使用](docs/learn-15.md)
 

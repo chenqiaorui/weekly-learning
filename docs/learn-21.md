@@ -191,3 +191,47 @@ func main() {
 ```
 #### 数组
 https://github1s.com/inancgumus/learngo/blob/master/14-arrays/01-whats-an-array/main.go
+
+#### go搭建一个web服务器
+参考：https://github.com/astaxie/build-web-application-with-golang
+
+http包建立web服务器
+cd /opt/go-demo/web-go
+
+go mod init web-go
+
+编辑main.go
+```
+package main
+
+import (
+	"fmt"
+	"net/http"
+	"strings"
+	"log"
+)
+
+func sayhelloName(w http.ResponseWriter, r *http.Request) {
+	r.ParseForm()  //解析参数，默认是不会解析的
+	fmt.Println(r.Form)  //这些信息是输出到服务器端的打印信息
+	fmt.Println("path", r.URL.Path)
+	fmt.Println("scheme", r.URL.Scheme)
+	fmt.Println(r.Form["url_long"])
+	for k, v := range r.Form {
+		fmt.Println("key:", k)
+		fmt.Println("val:", strings.Join(v, ""))
+	}
+	fmt.Fprintf(w, "Hello astaxie!") //这个写入到w的是输出到客户端的
+}
+
+func main() {
+	http.HandleFunc("/", sayhelloName) //设置访问的路由
+	err := http.ListenAndServe(":9090", nil) //设置监听的端口
+	if err != nil {
+		log.Fatal("ListenAndServe: ", err)
+	}
+}
+
+# 运行：go run main.go
+# 访问：http://localhost:9090
+```
