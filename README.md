@@ -94,6 +94,8 @@
 
 第 46 期：[运维办公工具](docs/learn-46.md)
 
+第 47 期：[C语言](docs/learn-47.md)
+
 
 
 
