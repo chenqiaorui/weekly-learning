@@ -38,7 +38,7 @@
 
 第 15 期：[ETCD使用](docs/learn-15.md)
 
-第 16 期：[firewalld使用](docs/learn-16.md)
+第 16 期：[linux防火墙使用](docs/learn-16.md)
 
 第 17 期：[docker & docker-compose](docs/learn-17.md)
 
