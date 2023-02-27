@@ -122,3 +122,8 @@ $ use mysql;
 $ update user set host='%' where user='root';
 $ FLUSH PRIVILEGES;
 ```
+
+#### 字符集和字符排序规则
+- character set，字符集定义了字符和编码。如字符A的编码为0。
+
+- 排序规则(collation): 定义了字符比较规则。如怎么比较A和B的大小？最直接就是比较编码，因为 0 < 1, 所以 A < B。还有一种规则，不论大小写，如a等于A。这些规则构成了排序规则。

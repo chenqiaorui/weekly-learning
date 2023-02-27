@@ -426,3 +426,7 @@ root@easub-Inspiron-3470:/opt# ll a.log
 swap(交换空间)：将内存页写到磁盘预配置空间，释放内存页。
 cat /proc/sys/vm/swappiness    # swappiness 取值范围0~100（默认为0），数值越大，使用swap概率越高。
 free -h 和 swapon -s 皆可以查看swap使用情况。
+
+#### xargs
+```ps aux|grep code|awk '{ print $2 }'|xargs -I {} kill {}```
+xargs -I 指定替换字符串为{}，{}代表着管道传递的参数，后面再使用{}会替换成相应参数值。
