@@ -154,10 +154,32 @@ echo "hello" | tee -a test.log # 追加到test.log
 例子：grep
 ```
 grep "ricky" test.log   # 只取选中的字符所在行
+
 grep -v "ricky" test.log  # 取不选中的行
+
 grep -r "ricky" ./*   # 递归查找当前目录及子目录下的ricky
+
 grep -e "rick*" test.log  # 开启正则匹配模式
+
 grep -w 'ricky' txt                          # 精确匹配字符串，-w只会匹配单独存在的ricky，如文本里存在arickya不会被匹配到，但a ricky a 会
+
+1. 筛选ip
+grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}'
+
+2. 筛选指定内容行的前后3行 
+grep -C 3 'test'
+
+3. 筛选指定字符开头
+grep -o 'S.*'
+
+4. 筛选两个字符串之间的内容(不包含w1,w2)
+grep -o -P '(?<=w1).*(?=w2)'
+
+5. 只取第一个匹配到的
+grep -m 1 bob 
+
+6. 忽略大小写
+grep -i "bob"
 ```
 
 

@@ -26,6 +26,9 @@ curl -so /dev/null -v 'https://example.com/web/home/feature_3_bg.png' -H 'refere
 # get请求
 curl -i -X GET http://httpbin.org:80/anything/foo?arg=1  # -i表示打印响应头
 
+# post请求
+curl -X POST "http://127.0.0.1:8060/uc/v1/user/register" -H "Content-Type: application/json" -d "{\"mobile\":\"18888888888\",\"password\":\"123456\"}"    ## -H 表设置 请求头
+
 # wget 下载资源
 
 wget http://logtail-release-cn-hangzhou.oss-cn-hangzhou.aliyuncs.com/linux64/logtail.sh -O logtail.sh;chmod 755 logtail.sh // -O 指定文件名称
