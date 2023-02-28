@@ -1,5 +1,20 @@
+#### 资源对象
+Upstream: 上游，指向具体主机服务，可配置负载均衡、健康检查、重试
+
+Consumer: 消费者，指代具体某个人/物，与认证插件捆绑进行认证。
+
+#### 可用架构
+route-->service(绑定plugin)-->指向upstream
+
+
+##### 功能
+支持蓝绿发布(撤下组A更新代码，只有组B提供服务)、限速限流、ip白名单
+
+##### 为什么要用到APISIX（api网关）？
+微服务体系下，统一API接入和输出。(即一个域名就可以接入所有服务的api)
 ### 插件开发须知
 请求经过网关的不同阶段： init, rewrite, access, balancer, header filter, body filter and log。
+
 
 #### <<key-auth插件分析>> 
 定义插件名称、优先级、schema
