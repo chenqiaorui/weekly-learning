@@ -96,6 +96,10 @@
 
 第 47 期：[C语言](docs/learn-47.md)
 
+第 48 期：[prometheus & grafana](docs/learn-48.md)
+
+第 49 期：[容器containerd命令](docs/learn-49.md)
+
 
 
 

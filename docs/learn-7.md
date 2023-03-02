@@ -127,3 +127,92 @@ $ FLUSH PRIVILEGES;
 - character set，字符集定义了字符和编码。如字符A的编码为0。
 
 - 排序规则(collation): 定义了字符比较规则。如怎么比较A和B的大小？最直接就是比较编码，因为 0 < 1, 所以 A < B。还有一种规则，不论大小写，如a等于A。这些规则构成了排序规则。
+
+#### Mysql运用
+```
+# 测试int的最大值
+
+INSERT INTO `test`.`students`(`id`, `name`, `age`, `address`) VALUES (11, '测试int范围', 2147483649, NULL)
+> 1264 - Out of range value for column 'age' at row 1
+
+# 测试varchar(20)
+
+INSERT INTO `test`.`students`(`id`, `name`, `age`, `address`) VALUES (11, '测试范围测试范围测试范围测试范围测试范围围', 214748, NULL)
+> 1406 - Data too long for column 'name' at row 1
+
+# 测试时间格式datetime
+
+INSERT INTO `test`.`students`(`id`, `name`, `age`, `address`, `create_time`) VALUES (11, '测试时间datetime', 37, 'xx孤社区63号', '2023-03-02 10:47:57');
+
+-- 创建数据库
+create database andongni; 
+
+-- 展示所有数据库
+show databases;
+
+-- 切换数据库
+use andongni;
+
+-- 当前使用的数据库
+select database();
+
+-- 创建表
+create table dior(
+	id int,
+  name varchar(20) not null,
+	gender varchar(10) default 'male', 
+	primary key(id)
+);
+
+-- 查看所有表
+show tables;
+
+-- 查看表字段
+desc dior;
+
+-- 修改字段
+alter table dior change name sname varchar(10);
+
+alter table dior modify sname varchar(30);
+
+-- 插入
+insert into dior (id, sname) values(3,'a');
+
+-- 更新
+update dior set sname='a-update' where id = 2;
+
+-- 删除
+delete from dior where id = 2;
+
+-- 过滤重复数据
+select distinct sname from dior;
+
+-- 数数
+select count(*) from dior;
+
+-- 最大值
+select max(id) from dior;
+
+-- 合计
+select sum(id) from dior;
+
+-- where
+select * from dior where id >= 3;
+
+select * from dior where id in (2,3);
+
+-- limit
+select * from dior order by id desc limit 1;
+
+-- 分组统计个数
+select count(*),id from dior group by id having id > 2;
+
+-- 关联查询
+
+select * from dior where id = (select id from dior where id =3);
+
+-- left join
+select class.cid,class.cname,student.sname from class left outer join student on class.cid=student.classid;
+
+
+```
