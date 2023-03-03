@@ -320,3 +320,5 @@ func main() {
 # 运行：go run main.go
 # 访问：http://localhost:9090
 ```
+#### go get 连接timeout
+go env -w GOPROXY=https://goproxy.cn,direct  # 设置代理即可。
