@@ -80,7 +80,7 @@ rdb -c memory /mnt/data/redis/dump.rdb >  /mnt/data/redis/memory.csv
 - expiry：过期值
 ```
 
-#### rdb工具更多使用
+#### rdb工具更多命令
 ```
 # 导出内存字节排名前3的keys
 rdb --command memory --largest 3 dump.rdb
@@ -88,6 +88,26 @@ rdb --command memory --largest 3 dump.rdb
 # 导出rdb中的keys
 rdb -c justkeys dump.rdb|uniq
 ```
+
+#### redis内存淘汰策略
+场景：当redis内存占满，会发生什么情况？
+
+淘汰策略默认是noeviction，不淘汰数据，新增或修改操作抛出异常。
+- volatile-lru：在设置过期时间的数据中淘汰最少使用的数据。
+
+- allkeys-lru：在所有的数据中淘汰最少使用的数据。
+
+- volatile-lfu：在设置过期时间的数据中淘汰使用频率最低的数据。
+
+- allkeys-lfu：在所有的数据中淘汰使用使用频率最低的数据。
+
+- volatile-random：在设置过期时间的数据中淘汰任意随机数据。
+
+- allkeys-random：在所有的数据中随机淘汰数据。
+
+- volatile-ttl：在设置过期时间的数据中淘汰最早过期的数据。
+
+- noeviction：默认策略，不淘汰数据，新增或者修改数据会抛异常，但是读操作正常进行，不受影响。
 
 参考：
 https://blog.csdn.net/weixin_48380416/article/details/123995573
