@@ -108,6 +108,8 @@
 
 第 52 期：[数据同步](docs/learn-52.md)
 
+第 53 期：[Redis内存分析](docs/learn-53.md)
+
 
 
 
