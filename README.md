@@ -1,4 +1,4 @@
-# weekly-learning
+# weekly or monthly-learning
 每月学习期刊
 
 记录每天值得学习的互联网知识。
