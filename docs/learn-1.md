@@ -304,12 +304,6 @@ dig A static.example.com +short
 dig NS static.example.com +short
 dig CNAME static.example.com +short
 ```
-
-### Python练习
-```
-
-```
-
 ### 日志轮询 + nginx请求分析
 背景：流量大的服务常常会产生很多大文件日志文件，占用磁盘空间，怎么去管理呢？使用日志切割服务logrotate。
 
