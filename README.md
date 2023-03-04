@@ -106,6 +106,8 @@
 
 第 51 期：[RPC](docs/learn-51.md)
 
+第 52 期：[数据同步](docs/learn-52.md)
+
 
 
 
