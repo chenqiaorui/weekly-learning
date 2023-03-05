@@ -211,5 +211,12 @@ select * from dior where id = (select id from dior where id =3);
 -- left join
 select class.cid,class.cname,student.sname from class left outer join student on class.cid=student.classid;
 
+```
 
+#### Basic
+```
+show processlist; # 查看正在运行的所有客户端连接/工作线程。
+alter table user add column password varchar(50); # 添加表字段
+alter table user add index idx_username(username); # 添加索引
+select version(); # 查看版本
 ```

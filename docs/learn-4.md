@@ -1448,3 +1448,7 @@ iptables -I INPUT -p tcp -s 192.168.31.145 --dport 81 -j DROP
 iptables -I INPUT -s $ip -p tcp --dport 3306 -j ACCEPT
 
 ```
+
+参考：
+
+https://juejin.cn/post/7171704553984196615
