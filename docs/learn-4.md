@@ -1373,3 +1373,78 @@ sh b.sh &
 wait
 echo "it's me"
 ```
+
+#### 封攻击ip脚本
+实现思路
+```
+1. nginx日志按天切割；
+2. 单ip每天访问累计超100 pv封禁
+```
+
+编写日志切割脚本：log_cut.sh
+
+```
+# 每天0点执行日志按日期分隔脚本 0 0 * * * cd /root/scripts/ && ./log_cut.sh
+#!/bin/bash
+LOG_PATH=/data/logs/nginx/
+
+YESTEDAY=$(date -d  "yesterday" + %Y-%m-%d)
+
+PID=/var/run/nginx.pid
+
+mv ${LOG_PATH}access.log ${LOG_PATH}access-${YESTERDAY}.log
+
+#向Nginx主进程发送USR1信号，重新打开⽇志⽂件
+kill -USR1 `cat ${PID}`
+```
+
+封禁脚本编写：`blackip.sh `
+
+```
+# 每十分钟执行一次封禁ip脚本 */10 * * * * cd /root/scripts/ && ./blackip.sh
+#!/bin/bash
+logdir=/data/logs/nginx/access.log #nginx访问日志文件路径
+port=443
+#循环遍历日志文件取出访问量大于100的ip（忽略自己本地ip）
+for drop_ip in $(cat $logdir | grep -v '127.0.0.1' | awk '{print $1}' | sort | uniq -c | sort -rn | awk '{if ($1>100) print $2}'); do
+  # 避免重复添加
+  num=$(grep ${drop_ip} /tmp/nginx_deny.log | wc -l)
+  if [ $num -ge 1 ]; then
+    continue
+  fi
+  # shellcheck disable=SC2154
+  iptables -I INPUT -p tcp --dport ${port} -s ${drop_ip} -j DROP
+  echo ">>>>> $(date '+%Y-%m-%d %H%M%S') - 发现攻击源地址 ->  ${drop_ip} " >>/tmp/nginx_deny.log #记录log
+done
+```
+
+一些常用的iptables命令
+```
+# 查看所有规则
+iptables -L
+
+# 备份
+iptables-save > iptables.txt
+
+# 导入规则
+iptables-restore < iptables.txt
+
+# 清除所有
+iptables -F
+
+# 重启后生效 
+service iptables save
+
+# 禁用某ip访问本机 
+iptables -I INPUT -s $ip -j DROP
+
+# 禁用网段
+iptables -I INPUT -p tcp -s 192.168.116.0/24 -j DROP
+
+# 禁用ip的某个端口
+iptables -I INPUT -p tcp -s 192.168.31.145 --dport 81 -j DROP
+
+# 开放访问某端口
+iptables -I INPUT -s $ip -p tcp --dport 3306 -j ACCEPT
+
+```
