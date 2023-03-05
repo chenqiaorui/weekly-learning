@@ -110,7 +110,9 @@
 
 第 53 期：[Redis内存分析](docs/learn-53.md)
 
-第 53 期：[linux设置代理之docker拉取镜像](docs/learn-54.md)
+第 54 期：[linux设置代理之docker拉取镜像](docs/learn-54.md)
+
+第 55 期：[go-mall项目开发](docs/learn-55.md)
 
 
 
