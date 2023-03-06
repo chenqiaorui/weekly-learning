@@ -177,3 +177,37 @@ MiB Swap:   2048.0 total,    580.2 free,   1467.8 used.   3015.1 avail Mem
 - `F` # 挑选你要选择展示的列，按下空格选中，* 代表会展示的列(列会出现在最后)，按q退出。
     可以展示进程使用哪一个cpu
 - 按`1` # 展示每个cpu的使用情况
+
+#### 工具合集
+```
+# 压测
+ab -c 100 -n 1000 http://192.168.0.10:10000/   # 一次并发100，共1000
+...
+Requests per second: 87.86 [#/sec] (mean)   # 平均每秒处理87个请求
+Time per request: 1138.229 [ms] (mean)     # 平均1个1.13秒
+...
+
+
+# 根据名称查看进程树
+pstree | grep stress
+
+# 监视短时进程
+execsnoop
+
+# 监视IO
+dstat 1 10 # 每隔1s输出，共10组，关注输出read和writ
+pidstat -d -p 4344 1 3 # 指定进程的读写速率
+strace -p 6082 # 追踪进程
+
+# 模拟网络SYN FLOOD 攻击
+hping3 -S -p 80 -i u100 192.168.0.30 
+说明：
+-S参数表示设置TCP协议的SYN（同步序列号）
+-i u100表示每隔100微秒发送一个网络帧
+
+sar -n DEV 1 # -n DEV 表示显示网络收发的报告，间隔1秒输出一组数据
+
+tcpdump -i eth0 -n tcp port 80 # 抓包，-n不解析协议名和主机名
+
+https://time.geekbang.org/column/article/72685
+```
