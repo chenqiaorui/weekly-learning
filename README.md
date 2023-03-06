@@ -114,6 +114,8 @@
 
 第 55 期：[go-mall项目开发](docs/learn-55.md)
 
+第 56 期：[Etcd少key高内存问题分析](docs/learn-56.md)
+
 
 
 
