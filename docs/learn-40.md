@@ -111,3 +111,17 @@ initalDelaySeconds  # 在容器启动后延迟多久去进行探测，默认为�
 postStart           # 在容器启动后立即执行的命令，如果这个操作失败了，那么容器会终止，且根据 restartPolicy 来决定是否重启
 preStop             # 在容器终止前立即执行的命令
 ```
+#### 容器技术-Docker
+```
+# 优点
+docker镜像提供带有完整文件系统和运行环境的沙盒，相当一个服务压缩包，即完成了应用打包功能。
+
+# 容器实现原理
+PID Namespace 技术伪造进程100成进程1；
+Mount Namespace 让隔离进程只看到本隔离空间的挂载点：
+NetWork Namespace 让被隔离进程看到当前 Namespace 里的网络设备和配置。
+
+namespace(提供视图隔离，让人看起来容器里面跑的进程像是独立于宿主机) 和 cgroup（资源限制，真实的进程可能跑慢宿主机资源）是内核特性，容器本质上就是一个调用clone()加了限定参数的进程。
+
+https://time.geekbang.org/column/article/17921
+```
