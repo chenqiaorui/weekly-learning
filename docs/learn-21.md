@@ -322,3 +322,66 @@ func main() {
 ```
 #### go get 连接timeout
 go env -w GOPROXY=https://goproxy.cn,direct  # 设置代理即可。
+
+#### 什么是Protobuf
+```
+数据描述语言。
+
+# 语法
+# 在.proto文件中定义Message
+syntax = "proto3"; // 指定使用proto3语法。必须是文件中非空非注释行的第一行。
+
+message SearchRequest {      // SearchRequest，定义了3个带有类型的字段，
+  string query = 1;          // 唯一编号用来在二进制消息体中识别字段
+  int32 page_number = 2;     // 
+  int32 result_per_page = 3;
+}
+
+// 单个文件可以定义多个message
+message M2   ...略
+
+说明：使用Protocol buffer编译器编译.proto文件后生成.pb.go文件
+# 定义Service
+service SearchService {
+  rpc Search (SearchRequest) returns (SearchResponse);  // 接收SearchRequest，返回SearchResponse
+}
+```
+####  编译器protoc编译.proto文件示例
+```
+# 安装protoc编译器
+cd /opt/protoc-demo
+
+wget https://github.com/protocolbuffers/protobuf/releases/download/v22.0/protoc-22.0-linux-x86_64.zip
+
+# 解压
+unzip -d protoc protoc-22.0-linux-x86_64.zip
+
+ln -s /opt/protoc-demo/protoc/bin/protoc /usr/bin/protoc
+
+protoc --version
+
+# 官方的protoc编译器中并不支持Go语言，需要安装一个插件才能生成Go代码
+go mod init protoc-demo
+
+go get github.com/golang/protobuf/protoc-gen-go
+
+ln -s /root/go/bin/protoc-gen-go /usr/bin/protoc-gen-go # protoc-gen-go位置可根据find / -name protoc-gen-go 查得 
+
+# 编辑request.protoc
+syntax = "proto3"; // 指定使用proto3语法。必须是文件中非空非注释行的第一行。
+
+option go_package="/main"; // 指定包名，必须
+
+message SearchRequest {
+  string query = 1;          
+  int32 page_number = 2;     
+  int32 result_per_page = 3;
+}
+
+# 编译
+protoc --proto_path=. --go_out=. request.proto
+
+说明：
+--proto_path 表request.proto所处位置
+--go_out=. 表生成的.pb.go文件输出到当前目录，又因为request.proto里面定义了包名，最终是生成main/request.pb.go
+```
