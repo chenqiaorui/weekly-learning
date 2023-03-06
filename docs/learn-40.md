@@ -56,5 +56,58 @@ Nodes: 容器运行环境。
 # Service
 暴露服务，通过标签选择器找到Deployment等。
 - 访问格式：svcname.namespace.svc.cluster.local
+```
+#### kubectl
+kube-apiserver的客户端，实现k8s资源的增删改查等操作。
 
+常用命令：
+```
+# 创建deployment
+kubectl run nginx --image=nginx --replicas=5
+
+# 查看pod
+kubectl get pods -n kube-system -o wide
+
+# 删除pod，会重建
+kubectl delete pods nginx-deploy-5c9b546997-jsmk6
+
+# 拷贝文件到pod
+kubectl cp flannel.tar  nginx-58cd4d4f44-8pwb7:/usr/share/nginx/html
+
+# 进入pod
+kubectl exec -it nginx-58cd4d4f44-8pwb7 -- /bin/bash
+
+# 扩容
+kubectl scale --replicas=5 deployment nginx-deploy
+
+# 修改service为NodePort
+kubectl edit service nginx # type: ClusterIP -> type: NodePort
+
+# 查看日志
+kubectl logs pod-demo busybox
+```
+#### pod配置清单
+```
+# pod重启策略key：restartPolicy
+- Always：容器挂了总是重启
+- OnFailure：只有其状态为错误的时候才去重启它
+- Never：从来不重启，挂了就挂了
+
+# pod生命周期
+Pending：已经创建但是没有适合运行它的节点
+
+用户提交创建请求后，交给apiserver，接着scheduler进行调度，调度结果存到etcd，apiserver通知节点的kubelet去部署，部署状态返回存到etcd。
+
+# probe探针监测
+livenessprobe # 容器是否运行，失败按restartPolicy策略重启
+readinessProbe # 容器探测端口是否可用，如果失败service会移除pod的ip
+
+failureThreshold    # 探测几次才判定为探测失败，默认为 3 次。
+periodSeconds       # 每次探测周期的间隔时长。
+timeoutSeconds      # 每次探测发出后等待结果的超时时间，默认为 1 秒。
+initalDelaySeconds  # 在容器启动后延迟多久去进行探测，默认为启动容器后立即探测。
+
+# lifecycle 生命周期钩子
+postStart           # 在容器启动后立即执行的命令，如果这个操作失败了，那么容器会终止，且根据 restartPolicy 来决定是否重启
+preStop             # 在容器终止前立即执行的命令
 ```
