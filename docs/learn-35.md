@@ -446,3 +446,4 @@ tcpdump & wireshark # 抓包
 # cat /proc/sys/net/ipv4/tcp_mem 查看配置
 #cat /proc/net/sockstat 查看当前tcp的统计
 #sysctl -w net.ipv4.tcp_mem=新配置 来增大
+```

@@ -116,6 +116,8 @@
 
 第 56 期：[Etcd少key高内存问题分析](docs/learn-56.md)
 
+第 57 期：[汇编](docs/learn-57.md)
+
 
 
 
