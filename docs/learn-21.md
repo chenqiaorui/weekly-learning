@@ -280,7 +280,6 @@ https://github1s.com/inancgumus/learngo/blob/master/14-arrays/01-whats-an-array/
 #### go搭建一个web服务器
 参考：https://github.com/astaxie/build-web-application-with-golang
 
-http包建立web服务器
 cd /opt/go-demo/web-go
 
 go mod init web-go

@@ -12,7 +12,7 @@ wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-
 curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
 
 # 更改/etc/yum.repos.d/CentOS-Base.repo
-所有http替换成https
+使用vi将所有http替换成https `:%s/http/https/g`
 
 # 更新镜像源
 yum clean all # 清除缓存

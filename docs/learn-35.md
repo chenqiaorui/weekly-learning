@@ -205,9 +205,244 @@ hping3 -S -p 80 -i u100 192.168.0.30
 -S参数表示设置TCP协议的SYN（同步序列号）
 -i u100表示每隔100微秒发送一个网络帧
 
+# 网络
+yum install sysstat
 sar -n DEV 1 # -n DEV 表示显示网络收发的报告，间隔1秒输出一组数据
 
 tcpdump -i eth0 -n tcp port 80 # 抓包，-n不解析协议名和主机名
 
-https://time.geekbang.org/column/article/72685
-```
+# 列出cpu个数
+lscpu
+
+# 查看进程父子关系
+yum install -y psmisc
+pstree -aps $pid
+
+# 资源优化
+应用角度：吞吐 & 延迟
+系统角度：cpu使用率
+
+# 内存
+free
+说明：
+- available：未使用内存 + 可回收缓存
+- used：已使用内存，包含共享内存
+- cache/buff：cache是文件内存，buff是磁盘内存
+top
+说明：
+- VIRT：虚拟内存，进程申请的但还未分配实际物理内存
+- RES: 实际占用的物理内存
+- SHR: 共享内存，一般是公共库、动态链接库
+- %MEM：物理内存占总内存百分比
+
+# 内存泄漏分析
+vmstat 3 # 实时查看内存变动
+yum install bcc
+memleak -a -p $pid
+
+# Swap
+swapoff -a # 关闭
+
+# IO
+df -i
+
+iostat -d -x 1 # -d -x 显示所有磁盘指标
+说明：
+- r/s 每s向磁盘发送的读请求数
+- rkB/s 每s从磁盘读的数据量
+- %util IO使用量
+
+# 进程io使用情况
+pidstat -d 1
+
+# 慢sql场景
+1.接口返回时间长；
+show full processlist; # 查看所有会话
+explain select * from products where productName='time';
+说明：
+- type为ALL代表全表查询
+- key为null代表无索引建立
+- rows代表扫描行数
+
+CREATE INDEX products_index ON products (productName); # 建立索引
+
+# 慢redis查询
+# redis持久化还是会用到磁盘
+strace -f -T -tt -p 9085 # -f表示跟踪子进程和子线程，-T表示显示系统调用的时长，-tt表示显示跟踪时间；-e fdatasync 可以指定函数
+
+# 网络
+应用 - 提供统一接口
+表示 - 数据转换
+会话 - 维护通信连接
+传输 - 加表头成包进行传输
+网络 - 路由
+数据链路 - MAC寻址
+物理 - 物理网络传输帧
+
+MTU - 1500 规定包大小
+
+ss -ltnp | head -n 3
+说明：
+Recv，Send-Q 接收(未被程序处理)和发送包队列(未被远端确认)，不为0代表包堆积
+state有Listening和Established
+
+# 网络吞吐
+sar -n DEV 1
+ethtool ens18 | grep Speed # 千兆网卡
+
+# 理解一台机器65536个端口
+对于客户端，确实受限；但对服务端，可以组合客户端ip+端口。
+
+# 测试某台机器tcp吞吐(带宽能力)
+yum install iperf3
+服务器1：iperf3 -s -i 1 -p 10000 # -s表示启动服务端，-i表示汇报间隔，-p表示监听端口
+
+# -c表示启动客户端，192.168.0.30为目标服务器的IP# -b表示目标带宽(单位是bits/s)# -t表示测试时间# -P表示并发数，-p表示目标服务器监听端口
+服务器2：iperf3 -c 192.168.0.30 -b 1G -t 15 -P 2 -p 10000
+
+回服务端看接口：SUM 行就是测试的汇总结果。receiver 表接收，Bandwidth是带宽。
+
+# 压测
+yum install -y httpd-tools
+ab -c 1000 -n 10000 http://192.168.0.30/  # -c表示并发请求数为1000，-n表示总的请求数为10000
+说明：
+Requests per second # 平均每个请求花费时间
+第二个Time per request # 实际请求的响应时间 
+
+# 域名
+nslookup time.geekbang.org
+
+dig +trace @114.114.114.114 +nodnssec time.geekbang.org # +trace表示开启跟踪查询# +nodnssec表示禁止DNS安全扩展；@114.114.114.114指定使用的dns服务器
+dns流程查询说明：client(time.geekbang.org) -> 114.114.114.114(可能存在time.geekbang.org缓存) -> NS .org -> m.root-servers.net -> dns9.hichina.com -> ip返回114 DNS服务器。
+
+# 内网域名解析可以通过自建DNS服务器或配置/etc/hosts文件
+# 强制使用https好处：防止dns劫持
+# 抓包
+tcpdump -nn udp port 53 or host 35.190.27.188 
+说明：
+-nn ，表示不解析抓包中的域名（即不反向解析）、协议以及端口号。
+udp port 53 ，表示只显示 UDP 协议的端口号（包括源端口和目的端口）为 53 的包。
+host 35.190.27.188 ，表示只显示 IP 地址（包括源地址和目的地址）为 35.190.27.188 的包。
+or 表 或
+
+第一条：
+36909+ 表示查询标识值，它也会出现在响应中，加号表示启用递归查询
+A? 表示查询 A 记录。
+geektime.org. 表示待查询的域名。
+30 表示报文长度。
+
+第二条：
+则是从 114.114.114.114 发送回来的 DNS 响应—-域名 geektime.org. 的 A 记录值为 35.190.27.188。
+
+第三条和第四条，是 ICMP echo request 和 ICMP echo reply，响应包的时间戳 14:02:31.539667，减去请求包的时间戳 14:02:31.508164 ，就可以得到，这次 ICMP 所用时间为 30ms
+
+第5第6条：
+反向地址解析 PTR 请求，只有请求包，却没有应答包。ping -n 可禁止ptr解析。
+
+# tcpdump选项解析
+-A 以ASCII格式显示网络包(不指定则只显示头信息)
+-i 指定网口
+-nn 不反向解析
+-w 保存到文件，以.pcap后缀结尾
+
+host 主机过滤
+port 端口过滤
+tcp 协议过滤
+and/or/not 逻辑表达
+
+# tcpdump输出格式
+时间戳 协议 源地址.源端口 > 目的地址.目的端口 网络包详细信息
+tcpdump -nn udp port 53 or host 35.190.27.188 -w ping.pcap
+
+# tcpdump & wireshark 抓包 tcp & http案例分析三次握手和四次挥手工作原理
+dig +short example.com93.184.216.34
+tcpdump -nn host 93.184.216.34 -w web.pcap
+
+curl http://example.com
+
+wireshark中分析：
+由于 HTTP 基于 TCP，所以最先看到的三个包，分别是 TCP 三次握手的包。接下来，中间的才是 HTTP 请求和响应包，而最后的三个包，则是 TCP 连接断开时的三次挥手包。
+
+从菜单栏中，点击 Statistics -> Flow Graph，然后，在弹出的界面中的 Flow type 选择 TCP Flows，可以更清晰的看到，整个过程中 TCP 流的执行过程。
+
+之所以有三个包，是因为服务器端收到客户端的 FIN 后，服务器端同时也要关闭连接，这样就可以把 ACK 和 FIN 合并到一起发送，节省了一个包，变成了“三次挥手”。
+
+而通常情况下，服务器端收到客户端的 FIN 后，很可能还没发送完数据，所以就会先回复客户端一个 ACK 包。稍等一会儿，完成所有数据包的发送后，才会发送 FIN 包。这也就是四次挥手了。
+
+# HTTP分析工具：fiddler
+$ curl -s -w 'Http code: %{http_code}\nTotal time:%{time_total}s\n' -o /dev/null http://192.168.0.30/ # 获取状态码和时间
+
+# 模拟ddos攻击
+hping3 -S -p 80 -i u10 192.168.0.30 #  -S参数表示设置TCP协议的SYN（同步序列号），-p表示目的端口为80。-i u10表示每隔10微秒发送一个网络帧
+
+curl -w 'Http code: %{http_code}\nTotal time:%{time_total}s\n' -o /dev/null --connect-timeout 10 http://192.168.0.30 # --connect-timeout表示连接超时时间
+
+sar -n DEV 1 # 观察收发情况
+
+tcpdump -i eth0 -n tcp port 80
+结果：Flags [S] 表示这是一个 SYN 包。大量的 SYN 包表明，这是一个 SYN Flood 攻击。即客户端构造大量的 SYN 包，请求建立 TCP 连接；而服务器收到包后，会向源 IP 发送 SYN+ACK 报文，并等待三次握手的最后一次 ACK 报文，直到超时。
+
+TCP 半开连接的方法，关键在于 SYN_RECEIVED 状态的连接。
+netstat -n -p | grep SYN_REC # -n表示不解析名字，-p表示显示连接所属进程
+
+iptables -I INPUT -s 192.168.0.2 -p tcp -j REJECT # 封ip
+iptables -A INPUT -p tcp --syn -m limit --limit 1/s -j ACCEPT # 限制syn并发数为每秒1次
+iptables -I INPUT -p tcp --dport 80 --syn -m recent --name SYN_FLOOD --update --seconds 60 --hitcount 10 -j REJECT # 限制单个IP在60秒新建立的连接数为10
+
+# 半开状态的连接数是有限制的
+sysctl net.ipv4.tcp_max_syn_backlog
+
+sysctl -w net.ipv4.tcp_max_syn_backlog=1024 # 增加半开连接容量
+
+sysctl -w net.ipv4.tcp_synack_retries=1 # 减少半开连接重试次数
+
+# 开启 SYN Cookies不维护半开连接状态
+sysctl -w net.ipv4.tcp_syncookies=1
+
+# 持久化保存
+$ cat /etc/sysctl.conf
+net.ipv4.tcp_syncookies = 1
+net.ipv4.tcp_synack_retries = 1
+net.ipv4.tcp_max_syn_backlog = 1024
+
+# 基于一些服务端会禁用icmp，使用hping3 or traceroute 测试延迟
+hping3 -c 3 -S -p 80 baidu.com # -c表示发送3次请求，-S表示设置TCP SYN，-p表示端口号为80
+
+traceroute --tcp -p 80 -n baidu.com  # --tcp表示使用TCP协议，-p表示端口号，-n表示不对结果中的IP地址执行反向域名解析
+
+# NAT
+SNAT(转换源ip，实现上网)
+192.168.0.2 -> 路由器（NAT网关）转换成公网ip：100.100.100.100 -> 百度
+
+DNAT(暴露内网服务)
+baidu.com 发回响应包 -> 路由器 -> 公网ip替换成192.168.0.2 -> 192.168.0.2
+
+# NAT实现原理
+Linux 内核提供的 Netfilter ，具体可通过工具iptables或firewalld实现链配置。
+
+对SNAT: iptables -t nat -A POSTROUTING -s 192.168.0.0/16 -j MASQUERADE
+对DNAT: iptables -t nat -A PREROUTING -d 100.100.100.100 -j DNAT --to-destination 192.168.0.2
+
+# 在使用 iptables 配置 NAT 规则时，Linux 需要转发来自其他 IP 的网络包，需开启 Linux 的 IP 转发功能
+查看：sysctl net.ipv4.ip_forward
+开启：sysctl -w net.ipv4.ip_forward=1
+持久化保存：
+cat /etc/sysctl.conf | grep ip_forward
+net.ipv4.ip_forward=1
+
+# 网络工具合集
+sar # 可查看网络接口、进程、IP地址吞吐量(BPS) 
+netstat或ss # 网络连接
+ping或hping3 # 网络延迟
+traceroute # 查看路由链路
+nslookup或dig # DNS解析
+iptables # 防火墙或NAT
+tcpdump & wireshark # 抓包
+
+# 网络优化内核参数设置
+- 增大每个套接字的缓冲区大小 net.core.optmem_max；推荐81920
+- 增大套接字接收缓冲区大小 net.core.rmem_max 和发送缓冲区大小 net.core.wmem_max； 513920/513920
+
+# cat /proc/sys/net/ipv4/tcp_mem 查看配置
+#cat /proc/net/sockstat 查看当前tcp的统计
+#sysctl -w net.ipv4.tcp_mem=新配置 来增大
