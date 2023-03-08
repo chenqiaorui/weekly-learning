@@ -121,3 +121,5 @@ else
 fi
 ```
 说明：`su jenkins`非登录用户没有bash环境，可以使用`su -s /bin/bash jenkins`以jenkin身份进入。
+
+#### Jenkins部署前端步骤

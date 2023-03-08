@@ -116,7 +116,9 @@
 
 第 56 期：[Etcd少key高内存问题分析](docs/learn-56.md)
 
-第 56 期：[Vue3项目开发](docs/learn-57.md)
+第 57 期：[Vue3项目开发](docs/learn-57.md)
+
+第 58 期：[汇编](docs/learn-58.md)
 
 
 
