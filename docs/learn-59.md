@@ -56,7 +56,7 @@ apcache对于用于一次性执行脚本任务的cli进程而言是不适用的�
 # 查看apcache是否开启
 php -i |grep opcache| grep "enable"
 
-说明：
+/usr/local/etc/php/php.ini-production说明：
 zend_extension=opcache.so
 opcache.enable=1
 opcache.enable_cli=0 //disable php_cli
