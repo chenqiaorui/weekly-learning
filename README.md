@@ -120,6 +120,9 @@
 
 第 58 期：[汇编](docs/learn-58.md)
 
+第 59 期：[WordPress性能调优](docs/learn-59.md)
+
+
 
 
 
