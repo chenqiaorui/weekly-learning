@@ -8,6 +8,7 @@ yum install -y iptables-services
 systemctl status iptables
 
 ##### 命令
+```
 基本选项说明：
 
 参数	作用
@@ -24,7 +25,7 @@ systemctl status iptables
 -p	匹配协议,如 tcp,udp,icmp
 --dport num	匹配目标端口号
 --sport num	匹配来源端口号
-
+```
 ##### 示例
 iptables -F  # 清空预设表所有规则链的规则
 
