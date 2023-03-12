@@ -25,11 +25,15 @@ modd作用: 监听文件变化，热部署应用。
 
 ```
 # demo
-# daemon +sigkill: ./data/demo -f app/demo.yaml
 app/*.go {
     prep: go build -o data/demo -v app/main.go
     daemon +sigkill: ./data/demo
 }
+app/usercenter/cmd/rpc/**/*.go {
+    prep: go build -o data/server/usercenter-rpc  -v app/usercenter/cmd/rpc/usercenter.go
+    daemon +sigkill: ./data/server/usercenter-rpc -f app/usercenter/cmd/rpc/etc/usercenter.yaml
+}
+
 ```
 
 项目目录代码
@@ -44,6 +48,7 @@ func main() {
     fmt.Println("hello world")
 }
 ```
+install modd：`go install github.com/cortesi/modd/cmd/modd@latest`
 
 执行modd: `modd -f modd.conf`，修改app/main.go，查看修改是否生效。
 
