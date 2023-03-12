@@ -220,3 +220,25 @@ alter table user add column password varchar(50); # 添加表字段
 alter table user add index idx_username(username); # 添加索引
 select version(); # 查看版本
 ```
+### MySQL 主从复制原理
+```
+mysql主从复制可以实现负载，读写分离，master主要负责写，node负责读。
+
+主从复制类型：
+- 主从同步：master和node都写完才通知用户
+- 主从异步：master一写完就通知用户
+- 主从半同步：master和任一个node写完就通知用户
+
+主从复制原理：
+- master需开启了二进制日志跟踪，node服务器通知master：我现在读到了最新的更新位置，然后封锁继续等待master更新通知。
+
+主从复制具体过程：
+1/ node启动2个线程，一个IO，另一个sql线程；
+2/ IO线程去请求master的binlog日志，且将binlog写到redo log(中继日志)；master特地开了一个log dump进程传输binlog。
+3/ node的sql进程用来读redo log，解析成insert等具体操作执行。
+
+```
+## Mysql主备搭建
+```
+
+```
